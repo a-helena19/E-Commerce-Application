@@ -1,4 +1,4 @@
-package at.fhv.e_commerce_application.application.services.impl;
+package at.fhv.e_commerce_application.application.services.impl.user;
 
 import at.fhv.e_commerce_application.application.services.user.DeleteUserService;
 import at.fhv.e_commerce_application.domain.model.user.User;

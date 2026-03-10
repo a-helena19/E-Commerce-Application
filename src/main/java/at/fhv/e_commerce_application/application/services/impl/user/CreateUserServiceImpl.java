@@ -1,4 +1,4 @@
-package at.fhv.e_commerce_application.application.services.impl;
+package at.fhv.e_commerce_application.application.services.impl.user;
 
 import at.fhv.e_commerce_application.application.mapper.dtoMapper.user.UserDTOMapper;
 import at.fhv.e_commerce_application.application.services.user.CreateUserService;
