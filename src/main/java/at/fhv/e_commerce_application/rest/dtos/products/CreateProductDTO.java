@@ -1,43 +1,19 @@
-package at.fhv.e_commerce_application.infrastructure.persistence.model.product;
+package at.fhv.e_commerce_application.rest.dtos.products;
 
-import jakarta.persistence.*;
-
-import java.util.UUID;
-
-@Entity
-@Table(name = "product")
-public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(nullable = false)
+public class CreateProductDTO {
     private String name;
-
     private String description;
-
-    @Column(nullable = false)
     private double price;
-
-    @Column(nullable = false)
     private int stock;
 
-    public ProductEntity() {}
+    public CreateProductDTO() {
+    }
 
-    public ProductEntity(UUID id, String name, String description, double price, int stock) {
-        this.id = id;
+    public CreateProductDTO(String name, String description, double price, int stock) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getName() {
