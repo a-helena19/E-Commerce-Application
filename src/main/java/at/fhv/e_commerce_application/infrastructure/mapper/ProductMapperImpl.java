@@ -13,12 +13,13 @@ public class ProductMapperImpl implements ProductMapper {
         if (entity == null) {
             return null;
         }
-        return new Product(
+        return Product.reconstruct(
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getPrice(),
-                entity.getStock()
+                entity.getStock(),
+                entity.getStatus()
         );
     }
 
@@ -32,7 +33,8 @@ public class ProductMapperImpl implements ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                product.getStock()
+                product.getStock(),
+                product.getStatus()
         );
     }
 

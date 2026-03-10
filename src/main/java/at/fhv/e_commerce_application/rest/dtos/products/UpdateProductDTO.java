@@ -8,16 +8,18 @@ public class UpdateProductDTO {
     private String description;
     private double price;
     private int stock;
+    private String status;
 
     public UpdateProductDTO() {
     }
 
-    public UpdateProductDTO(UUID id, String name, String description, double price, int stock) {
+    public UpdateProductDTO(UUID id, String name, String description, double price, int stock, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -58,5 +60,13 @@ public class UpdateProductDTO {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -8,5 +8,6 @@ public record GetProductDTO(
         String name,
         String description,
         double price,
-        int stock
+        int stock,
+        String status
 ) {}
