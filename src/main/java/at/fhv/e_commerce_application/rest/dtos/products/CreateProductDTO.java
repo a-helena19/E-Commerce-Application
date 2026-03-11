@@ -6,8 +6,7 @@ public class CreateProductDTO {
     private double price;
     private int stock;
 
-    public CreateProductDTO() {
-    }
+    public CreateProductDTO() {}
 
     public CreateProductDTO(String name, String description, double price, int stock) {
         this.name = name;
