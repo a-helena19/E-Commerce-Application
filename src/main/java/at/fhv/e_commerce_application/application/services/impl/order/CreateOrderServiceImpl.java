@@ -3,6 +3,9 @@ package at.fhv.e_commerce_application.application.services.impl.order;
 import at.fhv.e_commerce_application.application.mapper.dtoMapper.order.OrderDTOMapper;
 import at.fhv.e_commerce_application.application.services.cart.ClearCartService;
 import at.fhv.e_commerce_application.application.services.order.CreateOrderService;
+import at.fhv.e_commerce_application.domain.model.cart.Cart;
+import at.fhv.e_commerce_application.domain.model.cart.CartItem;
+import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
 import at.fhv.e_commerce_application.domain.model.exception.InvalidOrderDataException;
 import at.fhv.e_commerce_application.domain.model.exception.ProductNotFoundException;
 import at.fhv.e_commerce_application.domain.model.exception.ProductOutOfStockException;
@@ -13,7 +16,6 @@ import at.fhv.e_commerce_application.domain.model.product.Product;
 import at.fhv.e_commerce_application.domain.model.product.ProductRepository;
 import at.fhv.e_commerce_application.domain.model.product.ProductStatus;
 import at.fhv.e_commerce_application.rest.dtos.order.CreateOrderDTO;
-import at.fhv.e_commerce_application.rest.dtos.order.CreateOrderItemDTO;
 import at.fhv.e_commerce_application.rest.dtos.order.GetOrderDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +30,14 @@ import java.util.UUID;
 public class CreateOrderServiceImpl implements CreateOrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
     private final ClearCartService clearCartService;
     private final OrderDTOMapper orderDTOMapper;
 
-    public CreateOrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, ClearCartService clearCartService, OrderDTOMapper orderDTOMapper) {
+    public CreateOrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, CartRepository cartRepository, ClearCartService clearCartService, OrderDTOMapper orderDTOMapper) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
         this.clearCartService = clearCartService;
         this.orderDTOMapper = orderDTOMapper;
     }
@@ -41,15 +45,25 @@ public class CreateOrderServiceImpl implements CreateOrderService {
     @Override
     @Transactional
     public GetOrderDTO createOrder(CreateOrderDTO dto) {
-        validateOrderDTO(dto);
+        if (dto == null || dto.getUserId() == null) {
+            throw new InvalidOrderDataException("User ID cannot be null");
+        }
+
+        // Get user's cart
+        Cart cart = cartRepository.findByUserId(dto.getUserId());
+        if (cart == null || cart.getItems().isEmpty()) {
+            throw new InvalidOrderDataException("Cart is empty. Add items to cart before placing an order.");
+        }
+
+        List<CartItem> cartItems = cart.getItems();
 
         // Aggregate quantities per product (in case same product appears multiple times)
         Map<UUID, Integer> aggregatedQuantities = new HashMap<>();
-        for (CreateOrderItemDTO itemDTO : dto.getItems()) {
-            aggregatedQuantities.merge(itemDTO.getProductId(), itemDTO.getQuantity(), Integer::sum);
+        for (CartItem cartItem : cartItems) {
+            aggregatedQuantities.merge(cartItem.getProductId(), cartItem.getQuantity(), Integer::sum);
         }
 
-        // Validate stock availability for all products
+        // Validate stock availability and product status for all products
         Map<UUID, Product> products = new HashMap<>();
         for (Map.Entry<UUID, Integer> entry : aggregatedQuantities.entrySet()) {
             UUID productId = entry.getKey();
@@ -69,12 +83,12 @@ public class CreateOrderServiceImpl implements CreateOrderService {
             products.put(productId, product);
         }
 
-        // Create order items and calculate prices
+        // Create order items from cart items and calculate prices
         List<OrderItem> orderItems = new ArrayList<>();
-        for (CreateOrderItemDTO itemDTO : dto.getItems()) {
-            Product product = products.get(itemDTO.getProductId());
-            double itemPrice = product.getPrice() * itemDTO.getQuantity();
-            OrderItem orderItem = new OrderItem(null, itemDTO.getProductId(), itemDTO.getQuantity(), itemPrice);
+        for (CartItem cartItem : cartItems) {
+            Product product = products.get(cartItem.getProductId());
+            double itemPrice = product.getPrice() * cartItem.getQuantity();
+            OrderItem orderItem = new OrderItem(null, cartItem.getProductId(), cartItem.getQuantity(), itemPrice);
             orderItems.add(orderItem);
         }
 
@@ -93,33 +107,5 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         clearCartService.clearCartByUserId(dto.getUserId());
 
         return orderDTOMapper.toGetOrderDTO(savedOrder);
-    }
-
-    private void validateOrderDTO(CreateOrderDTO dto) {
-        if (dto == null) {
-            throw new InvalidOrderDataException("Order cannot be null");
-        }
-
-        if (dto.getUserId() == null) {
-            throw new InvalidOrderDataException("User ID cannot be null");
-        }
-
-        if (dto.getItems() == null || dto.getItems().isEmpty()) {
-            throw new InvalidOrderDataException("Order must contain at least one item");
-        }
-
-        validateOrderItems(dto.getItems());
-    }
-
-    private void validateOrderItems(List<CreateOrderItemDTO> items) {
-        for (CreateOrderItemDTO item : items) {
-            if (item.getProductId() == null) {
-                throw new InvalidOrderDataException("Product ID cannot be null for order item");
-            }
-
-            if (item.getQuantity() <= 0) {
-                throw new InvalidOrderDataException("Quantity must be greater than zero");
-            }
-        }
     }
 }
