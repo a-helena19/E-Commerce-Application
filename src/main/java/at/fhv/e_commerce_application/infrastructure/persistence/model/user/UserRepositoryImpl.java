@@ -4,11 +4,12 @@ import at.fhv.e_commerce_application.application.mapper.UserMapper;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserJPARepository userJPARepository;
