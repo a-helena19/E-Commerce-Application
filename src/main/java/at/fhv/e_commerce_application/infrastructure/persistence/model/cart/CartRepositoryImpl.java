@@ -6,6 +6,9 @@ import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
 import at.fhv.e_commerce_application.domain.model.exception.CartNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -29,7 +32,30 @@ public class CartRepositoryImpl implements CartRepository {
     @Override
     public Cart findByUserId (UUID userId) {
         return jpaRepository.findByUserId(userId)
-                .map(cartMapper::toDomain)
-                .orElseThrow(() -> new CartNotFoundException(userId));
+                .map(cartMapper::toDomain).orElseThrow(() -> new CartNotFoundException(userId));
     }
+
+    @Override
+    public Optional<Cart> findById(UUID cartId) {
+        return jpaRepository.findById(cartId)
+                .map(cartMapper::toDomain);
+    }
+
+    @Override
+    public List<Cart> findAll() {
+        List<CartEntity> entities = jpaRepository.findAll();
+        List<Cart> carts = new ArrayList<>();
+
+        for (CartEntity entity : entities) {
+            carts.add(cartMapper.toDomain(entity));
+        }
+
+        return carts;
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        jpaRepository.deleteByUserId(userId);
+    }
+
 }

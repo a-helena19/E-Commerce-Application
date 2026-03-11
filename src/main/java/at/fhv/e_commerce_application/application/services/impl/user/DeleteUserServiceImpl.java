@@ -1,6 +1,7 @@
 package at.fhv.e_commerce_application.application.services.impl.user;
 
 import at.fhv.e_commerce_application.application.services.user.DeleteUserService;
+import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.rest.exception.UserNotFoundException;
@@ -11,9 +12,11 @@ import java.util.UUID;
 @Service
 public class DeleteUserServiceImpl implements DeleteUserService {
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
-    public DeleteUserServiceImpl(UserRepository userRepository) {
+    public DeleteUserServiceImpl(UserRepository userRepository, CartRepository cartRepository) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class DeleteUserServiceImpl implements DeleteUserService {
         if (existingUser == null) {
             throw new UserNotFoundException("Benutzer mit ID " + id + " nicht gefunden");
         }
-
+        cartRepository.deleteByUserId(id);
         userRepository.deleteUser(id);
     }
 }

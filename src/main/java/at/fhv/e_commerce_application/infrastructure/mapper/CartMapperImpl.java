@@ -15,12 +15,11 @@ public class CartMapperImpl implements CartMapper {
     @Override
     public Cart toDomain(CartEntity entity) {
         List<CartItem> items = new ArrayList<>();
-
         for (CartItemEntity itemEntity : entity.getItems()) {
             items.add(toDomainItem(itemEntity));
         }
 
-        return new Cart(
+        return Cart.reconstruct(
                 entity.getId(),
                 entity.getUserId(),
                 items
@@ -31,21 +30,25 @@ public class CartMapperImpl implements CartMapper {
     public CartEntity toEntity(Cart cart) {
         List<CartItemEntity> items = new ArrayList<>();
 
-        for (CartItem item : cart.getItems()) {
-            items.add(toEntityItem(item));
-        }
-
-        return new CartEntity(
+        CartEntity cartEntity = new CartEntity(
                 cart.getId(),
                 cart.getUserId(),
                 items
         );
+
+        for (CartItem item : cart.getItems()) {
+            CartItemEntity itemEntity = toEntityItem(item);
+            itemEntity.setCart(cartEntity);
+            items.add(itemEntity);
+        }
+
+        return cartEntity;
     }
 
     @Override
     public CartItem toDomainItem(CartItemEntity entity) {
-        return new CartItem(
-                null,
+        return CartItem.reconstruct(
+                entity.getId(),
                 entity.getProductId(),
                 entity.getQuantity()
         );
@@ -54,7 +57,7 @@ public class CartMapperImpl implements CartMapper {
     @Override
     public CartItemEntity toEntityItem(CartItem cartItem) {
         return new CartItemEntity(
-                null,
+                cartItem.getId(),
                 cartItem.getProductId(),
                 cartItem.getQuantity()
         );

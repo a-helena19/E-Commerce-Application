@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 public class CartDTOMapperImpl implements CartDTOMapper {
     @Override
     public GetCartDTO toGetCartDTO(Cart cart) {
+        List<GetCartDTO.GetCartItemDTO> items = new ArrayList<>();
+
+        for (CartItem item : cart.getItems()) {
+            items.add(new GetCartDTO.GetCartItemDTO(item.getId(), item.getProductId(), item.getQuantity()));
+        }
+
         return new GetCartDTO(
                 cart.getId(),
                 cart.getUserId(),
-                cart.getItems().stream()
-                        .map(item -> new GetCartDTO.GetCartItemDTO(
-                                item.getProductId(),
-                                item.getQuantity()
-                        ))
-                        .toList()
+                items
         );
     }
 
@@ -30,15 +30,15 @@ public class CartDTOMapperImpl implements CartDTOMapper {
         List<CartItem> items = new ArrayList<>();
 
         for (GetCartDTO.GetCartItemDTO itemDTO : getCartDTO.items()) {
-            items.add(new CartItem(
+            items.add(CartItem.reconstruct(
                     null,
                     itemDTO.productId(),
                     itemDTO.quantity()
             ));
         }
 
-        return new Cart(
-                getCartDTO.id(),
+        return Cart.reconstruct(
+                getCartDTO.cartId(),
                 getCartDTO.userId(),
                 items
         );
