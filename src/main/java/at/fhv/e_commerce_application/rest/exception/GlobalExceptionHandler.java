@@ -1,8 +1,6 @@
 package at.fhv.e_commerce_application.rest.exception;
 
-import at.fhv.e_commerce_application.domain.model.exception.InvalidProductDataException;
-import at.fhv.e_commerce_application.domain.model.exception.ProductNotFoundException;
-import at.fhv.e_commerce_application.domain.model.exception.ProductOutOfStockException;
+import at.fhv.e_commerce_application.domain.model.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -74,6 +72,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidProductDataException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidProductData(InvalidProductDataException exception) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(CartNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleCartNotFound(CartNotFoundException exception) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(CartItemNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleCartItemNotFound(CartItemNotFoundException exception) {
+        return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCartItemDataException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidCartItemData(InvalidCartItemDataException exception) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
