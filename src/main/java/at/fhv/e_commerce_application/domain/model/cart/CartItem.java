@@ -1,5 +1,7 @@
 package at.fhv.e_commerce_application.domain.model.cart;
 
+import at.fhv.e_commerce_application.domain.model.exception.InvalidCartItemDataException;
+
 import java.util.UUID;
 
 public class CartItem {
@@ -7,10 +9,35 @@ public class CartItem {
     private UUID productId;
     private int quantity;
 
-    public CartItem(UUID id, UUID productId, int quantity) {
+    private CartItem(UUID id, UUID productId, int quantity) {
+        validateQuantity(quantity);
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
+    }
+
+    public static CartItem create(UUID productId, int quantity) {
+        return new CartItem(UUID.randomUUID(), productId, quantity);
+    }
+
+    public static CartItem reconstruct(UUID id, UUID productId, int quantity) {
+        return new CartItem(id, productId, quantity);
+    }
+
+    public void increaseQuantity(int amount) {
+        validateQuantity(amount);
+        quantity += amount;
+    }
+
+    public void setQuantity(int newQuantity) {
+        validateQuantity(newQuantity);
+        quantity = newQuantity;
+    }
+
+    private void validateQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new InvalidCartItemDataException("quantity", quantity, "Quantity must be greater than zero.");
+        }
     }
 
     public UUID getProductId() {
