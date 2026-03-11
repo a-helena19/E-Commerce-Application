@@ -31,24 +31,4 @@ public class ProductDTOMapper {
                 createProductDTO.getStock()
         );
     }
-
-    public Product toDomainUpdateProductDTO(UpdateProductDTO updateProductDTO) {
-        return Product.create(
-                updateProductDTO.getId(),
-                updateProductDTO.getName(),
-                updateProductDTO.getDescription(),
-                updateProductDTO.getPrice(),
-                updateProductDTO.getStock()
-        );
-    }
-
-    public Product toDomainDeleteProductDTO(DeleteProductDTO deleteProductDTO) {
-        return Product.create(
-                deleteProductDTO.getId(),
-                deleteProductDTO.getName(),
-                deleteProductDTO.getDescription(),
-                deleteProductDTO.getPrice(),
-                deleteProductDTO.getStock()
-        );
-    }
 }

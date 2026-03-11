@@ -27,7 +27,8 @@ public class ProductEntity {
     @Column(nullable = false)
     private ProductStatus status;
 
-    public ProductEntity() {}
+    public ProductEntity() {
+    }
 
     public ProductEntity(UUID id, String name, String description, double price, int stock, ProductStatus status) {
         this.id = id;

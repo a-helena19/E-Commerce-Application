@@ -41,6 +41,8 @@ public class Product {
         return new Product(id, name, description, price, stock, ProductStatus.ACTIVE);
     }
 
+
+
     public void update(String name, String description, double price, int stock) {
         if (status == ProductStatus.INACTIVE) {
             throw new InvalidProductDataException("status", status, "Can't update an inactive product.");

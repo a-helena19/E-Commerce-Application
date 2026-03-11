@@ -5,17 +5,15 @@ public class CreateProductDTO {
     private String description;
     private double price;
     private int stock;
-    private String status;
 
     public CreateProductDTO() {
     }
 
-    public CreateProductDTO(String name, String description, double price, int stock, String status) {
+    public CreateProductDTO(String name, String description, double price, int stock) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.status = status;
     }
 
     public String getName() {
@@ -48,13 +46,5 @@ public class CreateProductDTO {
 
     public void setStock(int stock) {
         this.stock = stock;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
