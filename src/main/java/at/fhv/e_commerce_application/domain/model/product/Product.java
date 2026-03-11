@@ -76,6 +76,13 @@ public class Product {
         stock -= quantity;
     }
 
+    public void increaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new InvalidProductDataException("quantity", quantity, "Quantity must be greater than zero.");
+        }
+        stock += quantity;
+    }
+
     private void validateName(String name) {
         if (name == null || name.isBlank()) {
             throw new InvalidProductDataException("name", name, "Name can't be null or blank.");

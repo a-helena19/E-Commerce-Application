@@ -54,4 +54,8 @@ public class OrderItemEntity {
         return price;
     }
 
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
 }

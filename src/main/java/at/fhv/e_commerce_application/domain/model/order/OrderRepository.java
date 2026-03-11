@@ -8,5 +8,4 @@ public interface OrderRepository {
     Order getOrderById(UUID orderId);
     List<Order> getOrdersByUserId(UUID userId);
     List<Order> getAllOrders();
-
 }

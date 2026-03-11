@@ -22,4 +22,13 @@ public class ClearCartServiceImpl implements ClearCartService {
         cart.clear();
         cartRepository.save(cart);
     }
+
+    @Override
+    public void clearCartByUserId(UUID userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+        if (cart != null) {
+            cart.clear();
+            cartRepository.save(cart);
+        }
+    }
 }

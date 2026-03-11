@@ -1,4 +1,4 @@
-package at.fhv.e_commerce_application.rest.exception;
+package at.fhv.e_commerce_application.domain.model.exception;
 
 public class EmailAlreadyExistsException extends RuntimeException {
     public EmailAlreadyExistsException(String message) {

@@ -5,17 +5,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CreateUserDTO {
-    @NotBlank(message = "Vorname ist erforderlich")
-    @Size(min = 2, max = 100, message = "Vorname muss zwischen 2 und 100 Zeichen lang sein")
+    @NotBlank(message = "First name is required")
+    @Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters")
     private String firstName;
 
-    @NotBlank(message = "Nachname ist erforderlich")
-    @Size(min = 2, max = 100, message = "Nachname muss zwischen 2 und 100 Zeichen lang sein")
+    @NotBlank(message = "Last name is required")
+    @Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters")
     private String lastName;
 
-    @NotBlank(message = "Email ist erforderlich")
-    @Email(message = "Email muss ein gültiges Format haben")
-    @Size(max = 255, message = "Email darf maximal 255 Zeichen lang sein")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email must be a valid format")
+    @Size(max = 255, message = "Email must not exceed 255 characters")
     private String email;
 
     public CreateUserDTO() {

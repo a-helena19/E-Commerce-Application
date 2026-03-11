@@ -29,7 +29,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     public Order getOrderById(UUID orderId) {
         return orderJPARepository.findById(orderId)
                 .map(orderMapper::toDomain)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElse(null);
     }
 
     @Override

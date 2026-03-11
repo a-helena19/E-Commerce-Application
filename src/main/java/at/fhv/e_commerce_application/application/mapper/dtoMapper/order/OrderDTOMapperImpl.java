@@ -2,8 +2,6 @@ package at.fhv.e_commerce_application.application.mapper.dtoMapper.order;
 
 import at.fhv.e_commerce_application.domain.model.order.Order;
 import at.fhv.e_commerce_application.domain.model.order.OrderItem;
-import at.fhv.e_commerce_application.rest.dtos.order.CreateOrderDTO;
-import at.fhv.e_commerce_application.rest.dtos.order.CreateOrderItemDTO;
 import at.fhv.e_commerce_application.rest.dtos.order.GetOrderDTO;
 import at.fhv.e_commerce_application.rest.dtos.order.GetOrderItemDTO;
 import org.springframework.stereotype.Component;
@@ -29,27 +27,6 @@ public class OrderDTOMapperImpl implements  OrderDTOMapper {
         );
     }
 
-    @Override
-    public Order toDomainFromGetDTO(CreateOrderDTO dto) {
-        List<OrderItem> items = dto.getItems()
-                .stream()
-                .map(this::toDomainItem)
-                .toList();
-
-        return Order.create(
-                dto.getUserId(),
-                items
-        );
-    }
-
-    private OrderItem toDomainItem(CreateOrderItemDTO dto) {
-        return new OrderItem(
-                null,
-                dto.getProductId(),
-                dto.getQuantity(),
-                dto.getPrice()
-        );
-    }
 
     private GetOrderItemDTO toGetOrderItemDTO(OrderItem item) {
         return new GetOrderItemDTO(

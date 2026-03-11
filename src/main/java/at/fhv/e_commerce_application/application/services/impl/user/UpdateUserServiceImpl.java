@@ -6,8 +6,8 @@ import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
 import at.fhv.e_commerce_application.rest.dtos.user.UpdateUserDTO;
-import at.fhv.e_commerce_application.rest.exception.EmailAlreadyExistsException;
-import at.fhv.e_commerce_application.rest.exception.UserNotFoundException;
+import at.fhv.e_commerce_application.domain.model.exception.EmailAlreadyExistsException;
+import at.fhv.e_commerce_application.domain.model.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service

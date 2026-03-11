@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserRestController {
     private final GetUserService getUserService;
     private final CreateUserService createUserService;
@@ -53,8 +53,9 @@ public class UserRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<GetUserDTO> updateUser(@PathVariable UUID id, @Valid @RequestBody UpdateUserDTO userDTO) {
-        GetUserDTO updatedUser = updateUserService.updateUser(userDTO);
-        if (updatedUser != null) {
+        GetUserDTO existingUser = getUserService.getUser(id);
+        if (existingUser != null) {
+            GetUserDTO updatedUser = updateUserService.updateUser(userDTO);
             return ResponseEntity.ok(updatedUser);
         } else {
             return ResponseEntity.notFound().build();

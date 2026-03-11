@@ -38,7 +38,7 @@ public class OrderMapperImpl implements OrderMapper {
                     .map(this::toEntityItem)
                     .toList();
 
-            return new OrderEntity(
+            OrderEntity orderEntity = new OrderEntity(
                     order.getId(),
                     order.getUserId(),
                     OrderStatusEntity.valueOf(order.getStatus().name()),
@@ -46,6 +46,12 @@ public class OrderMapperImpl implements OrderMapper {
                     order.getTotalPrice(),
                     order.getOrderDate()
             );
+
+            for (OrderItemEntity item : itemEntities) {
+                item.setOrder(orderEntity);
+            }
+
+            return orderEntity;
     }
 
     @Override
