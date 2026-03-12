@@ -21,7 +21,7 @@ public class UserDTOMapperImpl implements UserDTOMapper {
 
     @Override
     public User toDomainFromGetDTO(GetUserDTO getUserDTO) {
-        return new User(
+        return User.reconstitute(
                 getUserDTO.id(),
                 getUserDTO.firstName(),
                 getUserDTO.lastName(),

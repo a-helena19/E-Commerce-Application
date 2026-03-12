@@ -6,6 +6,7 @@ import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.domain.model.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,10 +21,11 @@ public class DeleteUserServiceImpl implements DeleteUserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(UUID id) {
         User existingUser = userRepository.getUserById(id);
         if (existingUser == null) {
-            throw new UserNotFoundException("Benutzer mit ID " + id + " nicht gefunden");
+            throw new UserNotFoundException("User with ID " + id + " not found");
         }
         cartRepository.deleteByUserId(id);
         userRepository.deleteUser(id);

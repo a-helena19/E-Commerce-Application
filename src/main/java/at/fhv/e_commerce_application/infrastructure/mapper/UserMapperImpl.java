@@ -15,7 +15,7 @@ public class UserMapperImpl implements UserMapper {
         if (userEntity == null) {
             return null;
         }
-        return new User(
+        return User.reconstitute(
             userEntity.getId(),
             userEntity.getFirstName(),
             userEntity.getLastName(),

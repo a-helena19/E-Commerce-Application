@@ -60,6 +60,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(InvalidUserDataException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidUserData(InvalidUserDataException exception) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleProductNotFound(ProductNotFoundException exception) {
         return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
@@ -108,8 +113,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-            "Interner Fehler",
-            "Ein unerwarteter Fehler ist aufgetreten: " + ex.getMessage(),
+            "Internal Error",
+            "An unexpected error occurred: " + ex.getMessage(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             null,
             LocalDateTime.now()

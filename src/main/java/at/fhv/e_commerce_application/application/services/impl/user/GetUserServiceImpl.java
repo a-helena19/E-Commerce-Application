@@ -25,7 +25,7 @@ public class GetUserServiceImpl implements GetUserService {
     public GetUserDTO getUser(UUID id) {
         User user = userRepository.getUserById(id);
         if (user == null) {
-            throw new UserNotFoundException("Benutzer mit ID " + id + " nicht gefunden");
+            throw new UserNotFoundException("User with ID " + id + " not found");
         }
         return userDTOMapper.toGetUserDTO(user);
     }

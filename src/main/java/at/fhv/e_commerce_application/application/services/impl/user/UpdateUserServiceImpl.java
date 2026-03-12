@@ -27,22 +27,15 @@ public class UpdateUserServiceImpl implements UpdateUserService {
             throw new UserNotFoundException("Benutzer mit ID " + userDTO.getId() + " nicht gefunden");
         }
 
-        if (!existingUser.getEmail().equals(userDTO.getEmail()) &&
+        if (!existingUser.getEmail().equalsIgnoreCase(userDTO.getEmail().trim()) &&
             userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new EmailAlreadyExistsException("Email '" + userDTO.getEmail() + "' ist bereits registriert");
+            throw new EmailAlreadyExistsException("Email '" + userDTO.getEmail() + "' is already registered");
         }
 
-        User updatedUser = new User(
-            userDTO.getId(),
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            existingUser.getStatus()
-        );
+        existingUser.update(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
 
-        userRepository.updateUser(updatedUser);
+        userRepository.updateUser(existingUser);
 
-        User reloadedUser = userRepository.getUserById(userDTO.getId());
-        return userDTOMapper.toGetUserDTO(reloadedUser);
+        return userDTOMapper.toGetUserDTO(existingUser);
     }
 }

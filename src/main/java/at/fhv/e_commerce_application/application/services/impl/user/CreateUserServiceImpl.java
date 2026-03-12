@@ -6,7 +6,6 @@ import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
-import at.fhv.e_commerce_application.domain.model.user.UserStatus;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
 import at.fhv.e_commerce_application.domain.model.exception.EmailAlreadyExistsException;
 import org.springframework.stereotype.Service;
@@ -26,10 +25,10 @@ public class CreateUserServiceImpl implements CreateUserService {
     @Override
     public GetUserDTO createUser(String firstName, String lastName, String email) {
         if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyExistsException("Email '" + email + "' ist bereits registriert");
+            throw new EmailAlreadyExistsException("Email '" + email + "' is already registered");
         }
 
-        User user = new User(null, firstName, lastName, email, UserStatus.ACTIVE);
+        User user = User.create(firstName, lastName, email);
         User created = userRepository.createUser(user);
 
         Cart newCart = Cart.create(created.getId());
