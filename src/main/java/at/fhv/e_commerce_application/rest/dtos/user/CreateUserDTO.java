@@ -1,20 +1,27 @@
 package at.fhv.e_commerce_application.rest.dtos.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class CreateUserDTO {
     @NotBlank(message = "First name is required")
+    @Pattern(regexp = "^[A-Za-z]+$")
+    @Schema(example = "Max")
     @Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters")
     private String firstName;
 
     @NotBlank(message = "Last name is required")
+    @Pattern(regexp = "^[A-Za-z]+$")
+    @Schema(example = "Mustermann")
     @Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters")
     private String lastName;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be a valid format")
+    @Schema(example = "max@example.com")
     @Size(max = 255, message = "Email must not exceed 255 characters")
     private String email;
 
