@@ -22,7 +22,7 @@ public class RemoveProductFromCartServiceImpl implements RemoveProductFromCartSe
 
     @Override
     public GetCartDTO removeItemFromCart(UUID cartId, UUID cartItemId) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> CartNotFoundException.byCartId(cartId));
         cart.removeItem(cartItemId);
         Cart savedCart = cartRepository.save(cart);
         return cartDTOMapper.toGetCartDTO(savedCart);

@@ -32,7 +32,7 @@ public class AddProductToCartServiceImpl implements AddProductToCartService {
 
     @Override
     public GetCartDTO addItemToCart(UUID cartId, AddCartItemDTO addCartItemDTO) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> CartNotFoundException.byCartId(cartId));
         UUID productId = addCartItemDTO.getProductId();
         int quantity = addCartItemDTO.getQuantity();
 

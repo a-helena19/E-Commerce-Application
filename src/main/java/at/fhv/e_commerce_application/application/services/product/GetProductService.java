@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface GetProductService {
     GetProductDTO getProductById(UUID id);
     List<GetProductDTO> getAllProducts();
+    List<GetProductDTO> getAllProducts(boolean includeInactive);
 }

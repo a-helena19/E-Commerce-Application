@@ -42,4 +42,18 @@ public class GetProductServiceImpl implements GetProductService {
 
         return activeProducts;
     }
+
+    @Override
+    public List<GetProductDTO> getAllProducts(boolean includeInactive) {
+        List<Product> allProducts = productRepository.findAll();
+        List<GetProductDTO> result = new ArrayList<>();
+
+        for (Product product : allProducts) {
+            if (includeInactive || product.getStatus() == ProductStatus.ACTIVE) {
+                result.add(productDTOMapper.toGetProductDTO(product));
+            }
+        }
+
+        return result;
+    }
 }

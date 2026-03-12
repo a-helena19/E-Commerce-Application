@@ -32,7 +32,8 @@ public class CartRepositoryImpl implements CartRepository {
     @Override
     public Cart findByUserId (UUID userId) {
         return jpaRepository.findByUserId(userId)
-                .map(cartMapper::toDomain).orElseThrow(() -> new CartNotFoundException(userId));
+                .map(cartMapper::toDomain)
+                .orElseThrow(() -> CartNotFoundException.byUserId(userId));
     }
 
     @Override

@@ -6,6 +6,7 @@ import at.fhv.e_commerce_application.application.services.order.CreateOrderServi
 import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartItem;
 import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
+import at.fhv.e_commerce_application.domain.model.exception.CartNotFoundException;
 import at.fhv.e_commerce_application.domain.model.exception.InvalidOrderDataException;
 import at.fhv.e_commerce_application.domain.model.exception.ProductNotFoundException;
 import at.fhv.e_commerce_application.domain.model.exception.ProductOutOfStockException;
@@ -65,7 +66,9 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         // Aggregate quantities per product (in case same product appears multiple times)
         Map<UUID, Integer> aggregatedQuantities = new HashMap<>();
         for (CartItem cartItem : cartItems) {
-            aggregatedQuantities.merge(cartItem.getProductId(), cartItem.getQuantity(), Integer::sum);
+            UUID productId = cartItem.getProductId();
+            int current = aggregatedQuantities.getOrDefault(productId, 0);
+            aggregatedQuantities.put(productId, current + cartItem.getQuantity());
         }
 
         // Validate stock availability and product status for all products
@@ -92,10 +95,8 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
             Product product = products.get(cartItem.getProductId());
-            BigDecimal itemPrice = product.getPrice()
-                    .multiply(BigDecimal.valueOf(cartItem.getQuantity()))
-                    .setScale(2, RoundingMode.HALF_UP);
-            OrderItem orderItem = new OrderItem(null, cartItem.getProductId(), cartItem.getQuantity(), itemPrice);
+            BigDecimal unitPrice = product.getPrice().setScale(2, RoundingMode.HALF_UP);
+            OrderItem orderItem = new OrderItem(null, cartItem.getProductId(), cartItem.getQuantity(), unitPrice);
             orderItems.add(orderItem);
         }
 

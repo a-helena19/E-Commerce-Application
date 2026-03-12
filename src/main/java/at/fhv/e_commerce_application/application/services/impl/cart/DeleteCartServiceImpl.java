@@ -18,7 +18,7 @@ public class DeleteCartServiceImpl implements DeleteCartService {
 
     @Override
     public void deleteCart(UUID cartId) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> CartNotFoundException.byCartId(cartId));
         cart.delete();
         cartRepository.save(cart);
     }
@@ -27,7 +27,7 @@ public class DeleteCartServiceImpl implements DeleteCartService {
     public void deleteCartByUserId(UUID userId) {
         Cart cart = cartRepository.findByUserId(userId);
         if (cart == null) {
-            throw new CartNotFoundException(userId);
+            throw CartNotFoundException.byUserId(userId);
         }
         cart.delete();
         cartRepository.save(cart);

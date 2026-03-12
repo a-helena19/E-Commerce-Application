@@ -2,6 +2,8 @@ package at.fhv.e_commerce_application.application.services.impl.user;
 
 import at.fhv.e_commerce_application.application.mapper.dtoMapper.user.UserDTOMapper;
 import at.fhv.e_commerce_application.application.services.user.UpdateUserService;
+import at.fhv.e_commerce_application.domain.model.cart.Cart;
+import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
@@ -10,13 +12,17 @@ import at.fhv.e_commerce_application.domain.model.exception.EmailAlreadyExistsEx
 import at.fhv.e_commerce_application.domain.model.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class UpdateUserServiceImpl implements UpdateUserService {
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
     private final UserDTOMapper userDTOMapper;
 
-    public UpdateUserServiceImpl(UserRepository userRepository, UserDTOMapper userDTOMapper) {
+    public UpdateUserServiceImpl(UserRepository userRepository, CartRepository cartRepository, UserDTOMapper userDTOMapper) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
         this.userDTOMapper = userDTOMapper;
     }
 
@@ -35,7 +41,13 @@ public class UpdateUserServiceImpl implements UpdateUserService {
         existingUser.update(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
 
         User updatedUser = userRepository.save(existingUser);
+        UUID cartId = null;
+        try {
+            Cart cart = cartRepository.findByUserId(updatedUser.getId());
+            cartId = cart.getId();
+        } catch (Exception e) {
+        }
 
-        return userDTOMapper.toGetUserDTO(updatedUser);
+        return userDTOMapper.toGetUserDTO(updatedUser, cartId);
     }
 }

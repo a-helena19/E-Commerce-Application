@@ -31,7 +31,7 @@ public class GetCardServiceImpl implements GetCartService {
 
     @Override
     public GetCartDTO getCartByCartId(UUID cartId) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new CartNotFoundException(cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> CartNotFoundException.byCartId(cartId));
         return cartDTOMapper.toGetCartDTO(cart);
     }
 

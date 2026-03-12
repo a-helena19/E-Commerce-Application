@@ -32,9 +32,9 @@ public class CreateUserServiceImpl implements CreateUserService {
         User created = userRepository.save(user);
 
         Cart newCart = Cart.create(created.getId());
-        cartRepository.save(newCart);
+        Cart savedCart = cartRepository.save(newCart);
 
-        return userDTOMapper.toGetUserDTO(created);
+        return userDTOMapper.toGetUserDTO(created, savedCart.getId());
     }
 
 }

@@ -5,17 +5,20 @@ import at.fhv.e_commerce_application.domain.model.user.UserStatus;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class UserDTOMapperImpl implements UserDTOMapper {
 
     @Override
-    public GetUserDTO toGetUserDTO(User user) {
+    public GetUserDTO toGetUserDTO(User user, UUID cartId) {
         return new GetUserDTO(
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                user.getStatus().name()
+                user.getStatus().name(),
+                cartId
         );
     }
 
