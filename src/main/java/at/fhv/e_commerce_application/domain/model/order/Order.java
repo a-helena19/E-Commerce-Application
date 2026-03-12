@@ -93,18 +93,9 @@ public class Order {
         return order;
     }
 
-    /* This method recalculates the total price of the order based on the prices and quantities of the order items.
-    private void recalculateTotalPrice() {
-        totalPrice = orderItems.stream()
-                .map(OrderItem::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-    */
-
     private void recalculateTotalPrice() {
         totalPrice = BigDecimal.ZERO;
         for (OrderItem item : orderItems) {
-            // price is the unit price, so multiply by quantity
             BigDecimal itemTotal = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
             totalPrice = totalPrice.add(itemTotal);
         }

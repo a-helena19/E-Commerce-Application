@@ -23,18 +23,15 @@ public class UpdateProductDTO {
     @Min(value = 0, message = "Stock cannot be negative")
     private int stock;
 
-    private String status;
-
     public UpdateProductDTO() {
     }
 
-    public UpdateProductDTO(UUID id, String name, String description, BigDecimal price, int stock, String status) {
+    public UpdateProductDTO(UUID id, String name, String description, BigDecimal price, int stock) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.status = status;
     }
 
     public UUID getId() {
@@ -75,13 +72,5 @@ public class UpdateProductDTO {
 
     public void setStock(int stock) {
         this.stock = stock;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

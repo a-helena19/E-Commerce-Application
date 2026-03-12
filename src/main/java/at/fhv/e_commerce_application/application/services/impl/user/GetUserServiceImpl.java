@@ -4,6 +4,7 @@ import at.fhv.e_commerce_application.application.mapper.dtoMapper.user.UserDTOMa
 import at.fhv.e_commerce_application.application.services.user.GetUserService;
 import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
+import at.fhv.e_commerce_application.domain.model.exception.CartNotFoundException;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
@@ -37,7 +38,7 @@ public class GetUserServiceImpl implements GetUserService {
         try {
             Cart cart = cartRepository.findByUserId(id);
             cartId = cart.getId();
-        } catch (Exception e) {
+        } catch (CartNotFoundException e) {
         }
 
         return userDTOMapper.toGetUserDTO(user, cartId);
@@ -54,7 +55,7 @@ public class GetUserServiceImpl implements GetUserService {
                 try {
                     Cart cart = cartRepository.findByUserId(user.getId());
                     cartId = cart.getId();
-                } catch (Exception e) {
+                } catch (CartNotFoundException e) {
                 }
                 result.add(userDTOMapper.toGetUserDTO(user, cartId));
             }

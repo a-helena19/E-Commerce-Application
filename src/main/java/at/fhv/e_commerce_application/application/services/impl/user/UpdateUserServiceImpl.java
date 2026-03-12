@@ -4,6 +4,7 @@ import at.fhv.e_commerce_application.application.mapper.dtoMapper.user.UserDTOMa
 import at.fhv.e_commerce_application.application.services.user.UpdateUserService;
 import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartRepository;
+import at.fhv.e_commerce_application.domain.model.exception.CartNotFoundException;
 import at.fhv.e_commerce_application.domain.model.user.User;
 import at.fhv.e_commerce_application.domain.model.user.UserRepository;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
@@ -45,7 +46,7 @@ public class UpdateUserServiceImpl implements UpdateUserService {
         try {
             Cart cart = cartRepository.findByUserId(updatedUser.getId());
             cartId = cart.getId();
-        } catch (Exception e) {
+        } catch (CartNotFoundException e) {
         }
 
         return userDTOMapper.toGetUserDTO(updatedUser, cartId);
