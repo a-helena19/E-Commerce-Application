@@ -1,6 +1,7 @@
 package at.fhv.e_commerce_application.domain.model.cart;
 
 import at.fhv.e_commerce_application.domain.model.exception.CartItemNotFoundException;
+import at.fhv.e_commerce_application.domain.model.exception.InvalidCartDataException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Cart {
         if (this.status == CartStatus.ACTIVE) {
             this.status = CartStatus.INACTIVE;
         } else {
-            throw new IllegalStateException("Only carts in ACTIVE status can be cancelled.");
+            throw new InvalidCartDataException("CartId", this.id, "Only carts in ACTIVE status can be cancelled.");
         }
     }
 
@@ -36,6 +37,9 @@ public class Cart {
     }
 
     public void addItem(UUID productId, int quantity) {
+        if (this.status == CartStatus.INACTIVE) {
+            throw new InvalidCartDataException("CartId", this.id, "Items can be added to only carts with ACTIVE status.");
+        }
         for (CartItem existingItem : items) {
             if (existingItem.getProductId().equals(productId)) {
                 existingItem.increaseQuantity(quantity);
@@ -45,6 +49,10 @@ public class Cart {
 
         CartItem newItem = CartItem.create(productId, quantity);
         items.add(newItem);
+    }
+
+    public boolean isInactive() {
+        return this.status == CartStatus.INACTIVE;
     }
 
     public void removeItem(UUID cartItemId) {

@@ -56,6 +56,10 @@ public class CreateOrderServiceImpl implements CreateOrderService {
             throw new InvalidOrderDataException("Cart is empty. Add items to cart before placing an order.");
         }
 
+        if(cart.isInactive()) {
+            throw new InvalidOrderDataException("Cart is inactive. Cannot place order.");
+        }
+
         List<CartItem> cartItems = cart.getItems();
 
         // Aggregate quantities per product (in case same product appears multiple times)
