@@ -22,9 +22,9 @@ public class UpdateUserServiceImpl implements UpdateUserService {
 
     @Override
     public GetUserDTO updateUser(UpdateUserDTO userDTO) {
-        User existingUser = userRepository.getUserById(userDTO.getId());
+        User existingUser = userRepository.findById(userDTO.getId());
         if (existingUser == null) {
-            throw new UserNotFoundException("Benutzer mit ID " + userDTO.getId() + " nicht gefunden");
+            throw new UserNotFoundException("User with ID " + userDTO.getId() + " not found");
         }
 
         if (!existingUser.getEmail().equalsIgnoreCase(userDTO.getEmail().trim()) &&
@@ -34,8 +34,8 @@ public class UpdateUserServiceImpl implements UpdateUserService {
 
         existingUser.update(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
 
-        userRepository.updateUser(existingUser);
+        User updatedUser = userRepository.save(existingUser);
 
-        return userDTOMapper.toGetUserDTO(existingUser);
+        return userDTOMapper.toGetUserDTO(updatedUser);
     }
 }

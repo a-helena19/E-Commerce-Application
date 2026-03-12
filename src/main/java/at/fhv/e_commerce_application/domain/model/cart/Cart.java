@@ -10,19 +10,29 @@ public class Cart {
     private UUID id;
     private UUID userId;
     private List<CartItem> items;
+    private CartStatus status;
 
-    private Cart(UUID id, UUID userId, List<CartItem> items) {
+    private Cart(UUID id, UUID userId, List<CartItem> items, CartStatus cartStatus) {
         this.id = id;
         this.userId = userId;
         this.items = new ArrayList<>(items);
+        this.status = cartStatus;
     }
 
     public static Cart create(UUID userId) {
-        return new Cart(UUID.randomUUID(), userId, new ArrayList<>());
+        return new Cart(UUID.randomUUID(), userId, new ArrayList<>(), CartStatus.ACTIVE);
     }
 
-    public static Cart reconstruct(UUID id, UUID userId, List<CartItem> items) {
-        return new Cart(id, userId, items);
+    public void delete() {
+        if (this.status == CartStatus.ACTIVE) {
+            this.status = CartStatus.INACTIVE;
+        } else {
+            throw new IllegalStateException("Only carts in ACTIVE status can be cancelled.");
+        }
+    }
+
+    public static Cart reconstruct(UUID id, UUID userId, List<CartItem> items, CartStatus status) {
+        return new Cart(id, userId, items, status);
     }
 
     public void addItem(UUID productId, int quantity) {
@@ -70,5 +80,9 @@ public class Cart {
 
     public List<CartItem> getItems() {
         return items;
+    }
+
+    public CartStatus getStatus() {
+        return status;
     }
 }

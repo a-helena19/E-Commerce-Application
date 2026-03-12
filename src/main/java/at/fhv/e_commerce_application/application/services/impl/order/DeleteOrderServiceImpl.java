@@ -59,7 +59,7 @@ public class DeleteOrderServiceImpl implements DeleteOrderService {
             productRepository.save(product);
         }
 
-        order.cancel();
+        order.delete();
         orderRepository.save(order);
     }
 

@@ -25,7 +25,6 @@ public class User {
         this.status = status;
     }
 
-    // Factory method for creating a new user with validation
     public static User create(String firstName, String lastName, String email) {
         validateFirstName(firstName);
         validateLastName(lastName);
@@ -45,7 +44,6 @@ public class User {
         return new User(id, firstName, lastName, email, status);
     }
 
-    // Business method to update user data
     public void update(String firstName, String lastName, String email) {
         validateFirstName(firstName);
         validateLastName(lastName);
@@ -56,7 +54,6 @@ public class User {
         this.email = email.trim().toLowerCase();
     }
 
-    // Status management methods
     public void activate() {
         this.status = UserStatus.ACTIVE;
     }
@@ -76,7 +73,6 @@ public class User {
         return status == UserStatus.INACTIVE;
     }
 
-    // Validation methods
     private static void validateFirstName(String firstName) {
         if (firstName == null || firstName.trim().isEmpty()) {
             throw new InvalidUserDataException("First name cannot be null or empty");
@@ -113,7 +109,6 @@ public class User {
         }
     }
 
-    // Getters (no setters - use business methods instead)
     public UUID getId() {
         return id;
     }

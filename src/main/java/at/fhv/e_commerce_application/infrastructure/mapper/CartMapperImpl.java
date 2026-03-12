@@ -3,8 +3,10 @@ package at.fhv.e_commerce_application.infrastructure.mapper;
 import at.fhv.e_commerce_application.application.mapper.CartMapper;
 import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartItem;
+import at.fhv.e_commerce_application.domain.model.cart.CartStatus;
 import at.fhv.e_commerce_application.infrastructure.persistence.model.cart.CartEntity;
 import at.fhv.e_commerce_application.infrastructure.persistence.model.cart.CartItemEntity;
+import at.fhv.e_commerce_application.infrastructure.persistence.model.cart.CartStatusEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,7 +24,8 @@ public class CartMapperImpl implements CartMapper {
         return Cart.reconstruct(
                 entity.getId(),
                 entity.getUserId(),
-                items
+                items,
+                CartStatus.valueOf(entity.getStatus().name())
         );
     }
 
@@ -33,7 +36,8 @@ public class CartMapperImpl implements CartMapper {
         CartEntity cartEntity = new CartEntity(
                 cart.getId(),
                 cart.getUserId(),
-                items
+                items,
+                CartStatusEntity.valueOf(cart.getStatus().name())
         );
 
         for (CartItem item : cart.getItems()) {

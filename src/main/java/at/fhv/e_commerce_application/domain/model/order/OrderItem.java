@@ -1,14 +1,15 @@
 package at.fhv.e_commerce_application.domain.model.order;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class OrderItem {
     private UUID id;
     private UUID productId;
     private int quantity;
-    private double price;
+    private BigDecimal price;
 
-    public OrderItem(UUID id, UUID productId, int quantity, double price) {
+    public OrderItem(UUID id, UUID productId, int quantity, BigDecimal price) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
@@ -27,7 +28,7 @@ public class OrderItem {
         return quantity;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -39,7 +40,7 @@ public class OrderItem {
         this.quantity = quantity;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 }

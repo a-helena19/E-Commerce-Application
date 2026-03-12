@@ -23,7 +23,7 @@ public class GetUserServiceImpl implements GetUserService {
 
     @Override
     public GetUserDTO getUser(UUID id) {
-        User user = userRepository.getUserById(id);
+        User user = userRepository.findById(id);
         if (user == null) {
             throw new UserNotFoundException("User with ID " + id + " not found");
         }
@@ -32,7 +32,7 @@ public class GetUserServiceImpl implements GetUserService {
 
     @Override
     public List<GetUserDTO> getUsers() {
-        List<User> users = userRepository.getAllUsers();
+        List<User> users = userRepository.findAll();
         return users.stream()
                 .map(userDTOMapper::toGetUserDTO)
                 .toList();

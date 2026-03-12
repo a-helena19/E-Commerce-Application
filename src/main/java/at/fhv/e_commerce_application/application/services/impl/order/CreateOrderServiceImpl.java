@@ -20,6 +20,8 @@ import at.fhv.e_commerce_application.rest.dtos.order.GetOrderDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,7 +51,6 @@ public class CreateOrderServiceImpl implements CreateOrderService {
             throw new InvalidOrderDataException("User ID cannot be null");
         }
 
-        // Get user's cart
         Cart cart = cartRepository.findByUserId(dto.getUserId());
         if (cart == null || cart.getItems().isEmpty()) {
             throw new InvalidOrderDataException("Cart is empty. Add items to cart before placing an order.");
@@ -87,7 +88,9 @@ public class CreateOrderServiceImpl implements CreateOrderService {
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
             Product product = products.get(cartItem.getProductId());
-            double itemPrice = product.getPrice() * cartItem.getQuantity();
+            BigDecimal itemPrice = product.getPrice()
+                    .multiply(BigDecimal.valueOf(cartItem.getQuantity()))
+                    .setScale(2, RoundingMode.HALF_UP);
             OrderItem orderItem = new OrderItem(null, cartItem.getProductId(), cartItem.getQuantity(), itemPrice);
             orderItems.add(orderItem);
         }

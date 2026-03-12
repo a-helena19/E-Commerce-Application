@@ -1,8 +1,8 @@
 package at.fhv.e_commerce_application.infrastructure.persistence.model.product;
 
-import at.fhv.e_commerce_application.domain.model.product.ProductStatus;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -17,20 +17,20 @@ public class ProductEntity {
 
     private String description;
 
-    @Column(nullable = false)
-    private double price;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal price;
 
     @Column(nullable = false)
     private int stock;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProductStatus status;
+    private ProductStatusEntity status;
 
     public ProductEntity() {
     }
 
-    public ProductEntity(UUID id, String name, String description, double price, int stock, ProductStatus status) {
+    public ProductEntity(UUID id, String name, String description, BigDecimal price, int stock, ProductStatusEntity status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -51,7 +51,7 @@ public class ProductEntity {
         return description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -59,7 +59,7 @@ public class ProductEntity {
         return stock;
     }
 
-    public ProductStatus getStatus() {
+    public ProductStatusEntity getStatus() {
         return status;
     }
 }

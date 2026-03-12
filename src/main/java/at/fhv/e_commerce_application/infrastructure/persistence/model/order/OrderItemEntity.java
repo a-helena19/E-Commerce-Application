@@ -2,6 +2,7 @@ package at.fhv.e_commerce_application.infrastructure.persistence.model.order;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -21,13 +22,13 @@ public class OrderItemEntity {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
-    private double price;
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal price;
 
     public OrderItemEntity() {
     }
 
-    public OrderItemEntity(UUID id, UUID productId, int quantity, double price) {
+    public OrderItemEntity(UUID id, UUID productId, int quantity, BigDecimal price) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
@@ -50,7 +51,7 @@ public class OrderItemEntity {
         return quantity;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

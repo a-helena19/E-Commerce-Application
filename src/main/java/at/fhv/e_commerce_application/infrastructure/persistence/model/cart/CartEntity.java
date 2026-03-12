@@ -1,5 +1,6 @@
 package at.fhv.e_commerce_application.infrastructure.persistence.model.cart;
 
+import at.fhv.e_commerce_application.infrastructure.persistence.model.order.OrderStatusEntity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -20,12 +21,17 @@ public class CartEntity {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItemEntity> items = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CartStatusEntity status;
+
     public CartEntity() {}
 
-    public CartEntity(UUID id, UUID userId, List<CartItemEntity> items) {
+    public CartEntity(UUID id, UUID userId, List<CartItemEntity> items, CartStatusEntity status) {
         this.id = id;
         this.userId = userId;
         this.items = items;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -39,5 +45,9 @@ public class CartEntity {
 
     public List<CartItemEntity> getItems() {
         return items;
+    }
+
+    public CartStatusEntity getStatus() {
+        return status;
     }
 }

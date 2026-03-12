@@ -2,7 +2,9 @@ package at.fhv.e_commerce_application.infrastructure.mapper;
 
 import at.fhv.e_commerce_application.application.mapper.ProductMapper;
 import at.fhv.e_commerce_application.domain.model.product.Product;
+import at.fhv.e_commerce_application.domain.model.product.ProductStatus;
 import at.fhv.e_commerce_application.infrastructure.persistence.model.product.ProductEntity;
+import at.fhv.e_commerce_application.infrastructure.persistence.model.product.ProductStatusEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,7 +21,7 @@ public class ProductMapperImpl implements ProductMapper {
                 entity.getDescription(),
                 entity.getPrice(),
                 entity.getStock(),
-                entity.getStatus()
+                ProductStatus.valueOf(entity.getStatus().name())
         );
     }
 
@@ -34,7 +36,7 @@ public class ProductMapperImpl implements ProductMapper {
                 product.getDescription(),
                 product.getPrice(),
                 product.getStock(),
-                product.getStatus()
+                ProductStatusEntity.valueOf(product.getStatus().name())
         );
     }
 

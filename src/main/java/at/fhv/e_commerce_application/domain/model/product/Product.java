@@ -3,13 +3,14 @@ package at.fhv.e_commerce_application.domain.model.product;
 import at.fhv.e_commerce_application.domain.model.exception.InvalidProductDataException;
 import at.fhv.e_commerce_application.domain.model.exception.ProductOutOfStockException;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Product {
     private UUID id;
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int stock;
     private ProductStatus status;
 
@@ -19,7 +20,7 @@ public class Product {
     private static final String NAME_REGEX = "^[\\p{L} ,.'-]+$";
     private static final String DESCRIPTION_REGEX = "^[\\p{L}0-9 ,.!?'()%-]*$";
 
-    private Product(UUID id, String name, String description, double price, int stock, ProductStatus status) {
+    private Product(UUID id, String name, String description, BigDecimal price, int stock, ProductStatus status) {
         validateName(name);
         validateDescription(description);
         validatePrice(price);
@@ -33,17 +34,17 @@ public class Product {
         this.status = status;
     }
 
-    public static Product reconstruct(UUID id, String name, String description, double price, int stock, ProductStatus status) {
+    public static Product reconstruct(UUID id, String name, String description, BigDecimal price, int stock, ProductStatus status) {
         return new Product(id, name, description, price, stock, status);
     }
 
-    public static Product create(UUID id, String name, String description, double price, int stock) {
+    public static Product create(UUID id, String name, String description, BigDecimal price, int stock) {
         return new Product(id, name, description, price, stock, ProductStatus.ACTIVE);
     }
 
 
 
-    public void update(String name, String description, double price, int stock) {
+    public void update(String name, String description, BigDecimal price, int stock) {
         if (status == ProductStatus.INACTIVE) {
             throw new InvalidProductDataException("status", status, "Can't update an inactive product.");
         }
@@ -111,9 +112,12 @@ public class Product {
         }
     }
 
-    private void validatePrice(double price) {
-        if (price < 0) {
-            throw new InvalidProductDataException("price", price, "Price can't be negative.");
+    private void validatePrice(BigDecimal price) {
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidProductDataException("price", price, "Price can't be null or negative.");
+        }
+        if (price.scale() > 2) {
+            throw new InvalidProductDataException("price", price, "Price must have at most 2 decimal places.");
         }
     }
 
@@ -131,7 +135,7 @@ public class Product {
         return status;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

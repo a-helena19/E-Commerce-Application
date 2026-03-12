@@ -29,7 +29,7 @@ public class CreateUserServiceImpl implements CreateUserService {
         }
 
         User user = User.create(firstName, lastName, email);
-        User created = userRepository.createUser(user);
+        User created = userRepository.save(user);
 
         Cart newCart = Cart.create(created.getId());
         cartRepository.save(newCart);

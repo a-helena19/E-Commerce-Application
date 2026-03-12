@@ -1,10 +1,18 @@
 package at.fhv.e_commerce_application.rest.dtos.cart;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.UUID;
 
 public class UpdateCartItemDTO {
+    @NotNull(message = "Cart ID is required")
     private UUID cartId;
+
+    @NotNull(message = "Cart Item ID is required")
     private UUID cartItemId;
+
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
 
     public UpdateCartItemDTO() {

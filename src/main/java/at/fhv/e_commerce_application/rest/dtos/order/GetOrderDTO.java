@@ -1,4 +1,6 @@
 package at.fhv.e_commerce_application.rest.dtos.order;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -8,7 +10,7 @@ public record GetOrderDTO(
         UUID userId,
         String status,
         List<GetOrderItemDTO> items,
-        double totalPrice,
+        BigDecimal totalPrice,
         LocalDateTime orderDate
 ) {
 }

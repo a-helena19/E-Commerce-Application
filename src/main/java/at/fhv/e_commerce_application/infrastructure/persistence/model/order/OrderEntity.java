@@ -2,6 +2,7 @@ package at.fhv.e_commerce_application.infrastructure.persistence.model.order;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -24,8 +25,8 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> orderItems;
 
-    @Column(name = "total_price", nullable = false)
-    private double totalPrice;
+    @Column(name = "total_price", nullable = false, precision = 19, scale = 2)
+    private BigDecimal totalPrice;
 
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
@@ -33,7 +34,7 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(UUID id, UUID userId, OrderStatusEntity status, List<OrderItemEntity> orderItems, double totalPrice, LocalDateTime orderDate) {
+    public OrderEntity(UUID id, UUID userId, OrderStatusEntity status, List<OrderItemEntity> orderItems, BigDecimal totalPrice, LocalDateTime orderDate) {
         this.id = id;
         this.userId = userId;
         this.status = status;
@@ -58,7 +59,7 @@ public class OrderEntity {
         return orderItems;
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 

@@ -2,6 +2,7 @@ package at.fhv.e_commerce_application.application.mapper.dtoMapper.cart;
 
 import at.fhv.e_commerce_application.domain.model.cart.Cart;
 import at.fhv.e_commerce_application.domain.model.cart.CartItem;
+import at.fhv.e_commerce_application.domain.model.cart.CartStatus;
 import at.fhv.e_commerce_application.rest.dtos.cart.GetCartDTO;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,8 @@ public class CartDTOMapperImpl implements CartDTOMapper {
         return new GetCartDTO(
                 cart.getId(),
                 cart.getUserId(),
-                items
+                items,
+                cart.getStatus().name()
         );
     }
 
@@ -40,7 +42,8 @@ public class CartDTOMapperImpl implements CartDTOMapper {
         return Cart.reconstruct(
                 getCartDTO.cartId(),
                 getCartDTO.userId(),
-                items
+                items,
+                CartStatus.valueOf(getCartDTO.status())
         );
     }
 }

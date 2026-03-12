@@ -1,5 +1,6 @@
 package at.fhv.e_commerce_application.domain.model.order;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -9,10 +10,10 @@ public class Order {
     private UUID userId;
     private OrderStatus status;
     private List<OrderItem> orderItems;
-    private double totalPrice;
+    private BigDecimal totalPrice;
     private LocalDateTime orderDate;
 
-    public Order(UUID id, UUID userId, OrderStatus status, List<OrderItem> orderItems, double totalPrice, LocalDateTime orderDate) {
+    public Order(UUID id, UUID userId, OrderStatus status, List<OrderItem> orderItems, BigDecimal totalPrice, LocalDateTime orderDate) {
         this.id = id;
         this.userId = userId;
         this.status = status;
@@ -37,7 +38,7 @@ public class Order {
         return orderItems;
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
@@ -65,7 +66,7 @@ public class Order {
         return status == OrderStatus.CANCELLED;
     }
 
-    public void cancel() {
+    public void delete() {
         if (isCreated()) {
             markAsCancelled();
         } else {
@@ -83,7 +84,7 @@ public class Order {
                 userId,
                 OrderStatus.CREATED,
                 items,
-                0,
+                BigDecimal.ZERO,
                 LocalDateTime.now()
         );
 
@@ -94,8 +95,8 @@ public class Order {
 
     private void recalculateTotalPrice() {
         totalPrice = orderItems.stream()
-                .mapToDouble(OrderItem::getPrice)
-                .sum();
+                .map(OrderItem::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }

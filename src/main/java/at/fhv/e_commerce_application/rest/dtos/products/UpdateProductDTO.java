@@ -1,19 +1,34 @@
 package at.fhv.e_commerce_application.rest.dtos.products;
 
+import jakarta.validation.constraints.*;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class UpdateProductDTO {
     private UUID id;
+
+    @NotBlank(message = "Product name is required")
+    @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     private String name;
+
+    @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
-    private double price;
+
+    @NotNull(message = "Price is required")
+    @DecimalMin(value = "0.01", message = "Price must be greater than 0")
+    @Digits(integer = 10, fraction = 2, message = "Price must have at most 2 decimal places")
+    private BigDecimal price;
+
+    @Min(value = 0, message = "Stock cannot be negative")
     private int stock;
+
     private String status;
 
     public UpdateProductDTO() {
     }
 
-    public UpdateProductDTO(UUID id, String name, String description, double price, int stock, String status) {
+    public UpdateProductDTO(UUID id, String name, String description, BigDecimal price, int stock, String status) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -46,11 +61,11 @@ public class UpdateProductDTO {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

@@ -6,7 +6,8 @@ import java.util.UUID;
 public record GetCartDTO(
         UUID cartId,
         UUID userId,
-        List<GetCartDTO.GetCartItemDTO> items
+        List<GetCartDTO.GetCartItemDTO> items,
+        String status
 ) {
 
     public record GetCartItemDTO(

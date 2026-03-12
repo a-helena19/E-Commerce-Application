@@ -7,6 +7,7 @@ import at.fhv.e_commerce_application.application.services.product.UpdateProductS
 import at.fhv.e_commerce_application.rest.dtos.products.CreateProductDTO;
 import at.fhv.e_commerce_application.rest.dtos.products.GetProductDTO;
 import at.fhv.e_commerce_application.rest.dtos.products.UpdateProductDTO;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,35 +30,30 @@ public class ProductRestController {
         this.deleteProductService = deleteProductService;
     }
 
-    // POST /api/products
     @PostMapping
-    public ResponseEntity<GetProductDTO> createProduct(@RequestBody CreateProductDTO dto) {
+    public ResponseEntity<GetProductDTO> createProduct(@Valid @RequestBody CreateProductDTO dto) {
         GetProductDTO createdProduct = createProductService.createProduct(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
-    // GET /api/products
     @GetMapping
     public ResponseEntity<List<GetProductDTO>> getAllProducts() {
         List<GetProductDTO> products = getProductService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
-    // GET /api/products/{id}
     @GetMapping("/{id}")
     public ResponseEntity<GetProductDTO> getProductById(@PathVariable UUID id) {
         GetProductDTO product = getProductService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
-    // PUT /api/products/{id}
     @PutMapping("/{id}")
-    public ResponseEntity<GetProductDTO> updateProduct(@PathVariable UUID id, @RequestBody UpdateProductDTO dto) {
+    public ResponseEntity<GetProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody UpdateProductDTO dto) {
         GetProductDTO updatedProduct = updateProductService.updateProduct(id, dto);
         return ResponseEntity.ok(updatedProduct);
     }
 
-    // DELETE /api/products/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<GetProductDTO> deleteProduct(@PathVariable UUID id) {
         GetProductDTO deletedProduct = deleteProductService.deleteProduct(id);

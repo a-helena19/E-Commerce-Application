@@ -24,8 +24,8 @@ public class GlobalExceptionHandler {
         );
 
         ErrorResponse errorResponse = new ErrorResponse(
-            "Validierungsfehler",
-            "Ein oder mehrere Felder haben ungültige Werte",
+            "Validation error",
+            "One or more fields have invalid values",
             HttpStatus.BAD_REQUEST.value(),
             fieldErrors,
             LocalDateTime.now()
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-            "Benutzer nicht gefunden",
+            "User not found",
             ex.getMessage(),
             HttpStatus.NOT_FOUND.value(),
             null,
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-            "Email bereits vorhanden",
+            "Email already exists",
             ex.getMessage(),
             HttpStatus.CONFLICT.value(),
             null,
