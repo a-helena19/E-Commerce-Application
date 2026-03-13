@@ -38,7 +38,13 @@ public class ProductRestController {
 
     @GetMapping
     public ResponseEntity<List<GetProductDTO>> getAllProducts() {
-        List<GetProductDTO> products = getProductService.getAllProducts();
+        List<GetProductDTO> products = getProductService.getAllProducts(true);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<List<GetProductDTO>> getActiveProducts() {
+        List<GetProductDTO> products = getProductService.getAllProducts(false);
         return ResponseEntity.ok(products);
     }
 
