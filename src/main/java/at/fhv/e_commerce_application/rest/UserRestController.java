@@ -7,6 +7,7 @@ import at.fhv.e_commerce_application.application.services.user.UpdateUserService
 import at.fhv.e_commerce_application.rest.dtos.user.CreateUserDTO;
 import at.fhv.e_commerce_application.rest.dtos.user.GetUserDTO;
 import at.fhv.e_commerce_application.rest.dtos.user.UpdateUserDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,7 @@ public class UserRestController {
         return ResponseEntity.ok(user);
     }
 
+    @Operation(description = "Creates a new user. A new cart will be automatically created.")
     @PostMapping
     public ResponseEntity<GetUserDTO> createUser(@Valid @RequestBody CreateUserDTO user) {
         GetUserDTO createdUser = createUserService.createUser(user.getFirstName(), user.getLastName(), user.getEmail());
@@ -62,6 +64,7 @@ public class UserRestController {
         }
     }
 
+    @Operation(description = "Sets the user status to INACTIVE. The user's cart status will also be set to INACTIVE.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         deleteUserService.deleteUser(id);

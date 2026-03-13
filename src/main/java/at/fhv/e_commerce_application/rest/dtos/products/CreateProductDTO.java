@@ -17,7 +17,7 @@ public class CreateProductDTO {
     @Digits(integer = 10, fraction = 2, message = "Price must have at most 2 decimal places")
     private BigDecimal price;
 
-    @Min(value = 0, message = "Stock cannot be negative")
+    @Min(value = 1, message = "Stock must be at least 1")
     private int stock;
 
     public CreateProductDTO() {}

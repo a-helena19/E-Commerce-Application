@@ -5,6 +5,7 @@ import at.fhv.e_commerce_application.application.services.order.DeleteOrderServi
 import at.fhv.e_commerce_application.application.services.order.GetOrderService;
 import at.fhv.e_commerce_application.rest.dtos.order.CreateOrderDTO;
 import at.fhv.e_commerce_application.rest.dtos.order.GetOrderDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ public class OrderRestController {
         return ResponseEntity.ok(orders);
     }
 
+    @Operation(description = "Get order by order ID")
     @GetMapping("/{id}")
     public ResponseEntity<GetOrderDTO> getOrder(@PathVariable UUID id) {
         GetOrderDTO order = getOrderService.getOrderById(id);
@@ -44,6 +46,7 @@ public class OrderRestController {
         return ResponseEntity.ok(order);
     }
 
+    @Operation(description="Order history of a user. CANCELLED orders are included.")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<GetOrderDTO>> getOrdersByUserId(@PathVariable UUID userId) {
         List<GetOrderDTO> orders = getOrderService.getOrdersByUserId(userId);
@@ -53,12 +56,14 @@ public class OrderRestController {
         return ResponseEntity.ok(orders);
     }
 
+    @Operation(description="Creates a new order with all cart items of the user.")
     @PostMapping
     public ResponseEntity<GetOrderDTO> createOrder(@Valid @RequestBody CreateOrderDTO dto) {
         GetOrderDTO createdOrder = createOrderService.createOrder(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
+    @Operation(description="Sets the order status to CANCELLED. Quantity will be added back to stock. Order still visible in order history.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID id) {
         GetOrderDTO order = getOrderService.getOrderById(id);

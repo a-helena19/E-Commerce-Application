@@ -7,6 +7,7 @@ import at.fhv.e_commerce_application.application.services.product.UpdateProductS
 import at.fhv.e_commerce_application.rest.dtos.products.CreateProductDTO;
 import at.fhv.e_commerce_application.rest.dtos.products.GetProductDTO;
 import at.fhv.e_commerce_application.rest.dtos.products.UpdateProductDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,12 +37,14 @@ public class ProductRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
+    @Operation(description="Retrieves all products, including inactive ones.")
     @GetMapping
     public ResponseEntity<List<GetProductDTO>> getAllProducts() {
         List<GetProductDTO> products = getProductService.getAllProducts(true);
         return ResponseEntity.ok(products);
     }
 
+    @Operation(description="Retrieves all active products.")
     @GetMapping("/active")
     public ResponseEntity<List<GetProductDTO>> getActiveProducts() {
         List<GetProductDTO> products = getProductService.getAllProducts(false);
@@ -60,6 +63,7 @@ public class ProductRestController {
         return ResponseEntity.ok(updatedProduct);
     }
 
+    @Operation(description = "Sets the product status with the given ID to INACTIVE.")
     @DeleteMapping("/{id}")
     public ResponseEntity<GetProductDTO> deleteProduct(@PathVariable UUID id) {
         GetProductDTO deletedProduct = deleteProductService.deleteProduct(id);
