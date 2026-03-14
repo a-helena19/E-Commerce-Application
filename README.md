@@ -1,4 +1,5 @@
 # E-Commerce-Application
+https://github.com/a-helena19/E-Commerce-Application.git
 ## Exercise 1
 
 - We use an H2 database to store the data.
